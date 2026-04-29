@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nature's Pharmacy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark: #2D5016;
+      --green-mid:  #4A7C1F;
+      --green-light:#6B9E2A;
+      --cream:      #FAFAF7;
+      --ink:        #1a1a1a;
+    }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 50%, var(--green-light) 100%);
+      padding: 2.2rem 1.5rem 1.8rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: .08;
+      background-image:
+        radial-gradient(circle at 20% 50%, white 1.5px, transparent 1.5px),
+        radial-gradient(circle at 80% 20%, white 1.5px, transparent 1.5px),
+        radial-gradient(circle at 55% 80%, white 1px,   transparent 1px);
+      background-size: 40px 40px, 40px 40px, 24px 24px;
+    }
+    header .leaf-icon { font-size: 2.6rem; display: block; margin-bottom: .35rem; animation: sway 4s ease-in-out infinite; }
+    @keyframes sway {
+      0%,100% { transform: rotate(-4deg); }
+      50%      { transform: rotate(4deg); }
+    }
+    header h1 {
+      color: #fff;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: .5px;
+      position: relative;
+    }
+    header p {
+      color: #D4E8A0;
+      font-size: .88rem;
+      margin-top: .3rem;
+      font-style: italic;
+      position: relative;
+    }
+
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex;
+      gap: .5rem;
+      overflow-x: auto;
+      padding: .85rem 1rem;
+      background: #fff;
+      border-bottom: 2px solid #f0f0f0;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .45rem 1rem;
+      border-radius: 999px;
+      border: 2px solid #e5e7eb;
+      background: #fff;
+      color: #555;
+      cursor: pointer;
+      font-family: 'Lora', serif;
+      font-size: .78rem;
+      font-weight: 500;
+      transition: background .2s, border-color .2s, color .2s, transform .15s;
+    }
+    .tab-btn:hover { transform: translateY(-1px); }
+    .tab-btn.active {
+      color: #fff;
+      font-weight: 700;
+      border-color: var(--tab-color);
+      background: var(--tab-color);
+      box-shadow: 0 4px 14px color-mix(in srgb, var(--tab-color) 35%, transparent);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.2rem 1rem 3rem;
+    }
+
+    /* Condition header card */
+    .condition-card {
+      border-radius: 16px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      border: 2px solid;
+      animation: fadeSlide .3s ease;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .condition-card .big-emoji { font-size: 3rem; flex-shrink: 0; }
+    .condition-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: .25rem;
+    }
+    .condition-card p { font-size: .82rem; color: #666; line-height: 1.55; }
+    .condition-card p strong { color: #444; }
+
+    /* Section label */
+    .section-label {
+      font-size: .95rem;
+      color: #333;
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .section-label .dot { font-size: 1rem; }
+
+    /* Remedy items */
+    .remedy-list { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.2rem; }
+
+    .remedy-item {
+      background: #fff;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      padding: .9rem 1rem;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .remedy-item.open {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    .remedy-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .remedy-left { display: flex; align-items: center; gap: .7rem; }
+    .remedy-num {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .remedy-name { font-weight: 600; font-size: .93rem; color: #222; }
+    .remedy-toggle { font-size: 1.2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+
+    .remedy-desc {
+      display: none;
+      margin: .65rem 0 0 2.4rem;
+      font-size: .87rem;
+      color: #444;
+      line-height: 1.75;
+    }
+    .remedy-item.open .remedy-desc { display: block; animation: expand .25s ease; }
+    @keyframes expand {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tips box */
+    .tips-box {
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      border: 1.5px solid;
+    }
+    .tips-box h4 {
+      font-size: .93rem;
+      margin-bottom: .65rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .tip-row {
+      display: flex;
+      gap: .55rem;
+      margin-bottom: .45rem;
+    }
+    .tip-row:last-child { margin-bottom: 0; }
+    .tip-arrow { flex-shrink: 0; margin-top: 2px; }
+    .tip-text { font-size: .84rem; color: #333; line-height: 1.65; }
+
+    /* Disclaimer */
+    .disclaimer {
+      text-align: center;
+      font-size: .72rem;
+      color: #aaa;
+      margin-top: 1.5rem;
+      line-height: 1.7;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <span class="leaf-icon">🌿</span>
+    <h1>Nature's Pharmacy</h1>
+    <p>Simple &bull; Natural &bull; No Side Effects</p>
+  </header>
+
+  <!-- TABS -->
+  <nav class="tab-bar" id="tabBar"></nav>
+
+  <!-- CONTENT -->
+  <main class="content" id="mainContent"></main>
+
+  <script>
+    const remedies = [
+      {
+        id: 1, title: "Cold & Runny Nose", emoji: "🤧",
+        color: "#3B82F6", bg: "#EFF6FF",
+        causes: "Viral infection, weather change, dust or pollen allergy",
+        remedies: [
+          { name: "Ginger + Honey Tea", desc: "Boil fresh ginger slices in water, add honey and a pinch of black pepper. Drink warm 2–3 times daily. Ginger is anti-inflammatory; honey soothes the throat." },
+          { name: "Steam Inhalation", desc: "Add a few drops of eucalyptus oil or carom seeds (ajwain) to hot water. Inhale steam for 5–10 minutes. Clears nasal passage instantly." },
+          { name: "Turmeric Milk", desc: "Mix ½ tsp turmeric in warm milk at bedtime. Curcumin in turmeric has powerful antiviral and anti-inflammatory properties." },
+          { name: "Tulsi (Holy Basil) Kadha", desc: "Boil 5–6 tulsi leaves with ginger, black pepper, and cloves. Drink warm. Tulsi is a natural immunobooster." },
+          { name: "Saline Nasal Rinse", desc: "Dissolve ¼ tsp salt in 1 cup warm water. Use a dropper or neti pot to rinse each nostril. Flushes out mucus and allergens naturally." },
+        ],
+        tips: ["Stay warm and avoid cold drinks", "Drink 8–10 glasses of warm water daily", "Rest well — the body heals fastest during sleep"],
+      },
+      {
+        id: 2, title: "Headache", emoji: "🤕",
+        color: "#8B5CF6", bg: "#F5F3FF",
+        causes: "Stress, dehydration, eye strain, sinus congestion, poor sleep",
+        remedies: [
+          { name: "Peppermint Oil", desc: "Apply diluted peppermint essential oil on temples and forehead. The menthol relaxes muscles and improves blood flow — acts within minutes." },
+          { name: "Cold or Warm Compress", desc: "For tension headache: warm compress on neck/shoulders. For migraine: cold compress on forehead. Reduces muscle tension and inflammation." },
+          { name: "Ginger Tea", desc: "Ginger blocks prostaglandins that cause pain. Drink fresh ginger tea at onset of headache. Works similar to aspirin without side effects." },
+          { name: "Clove Paste", desc: "Crush 2–3 cloves, mix with coconut oil, apply on forehead. Cloves contain eugenol — a natural pain reliever and cooling agent." },
+          { name: "Hydration + Magnesium", desc: "Drink 2 glasses of water immediately. Eat magnesium-rich foods: banana, spinach, almonds, pumpkin seeds. Dehydration and magnesium deficiency are top headache triggers." },
+        ],
+        tips: ["Reduce screen time and take eye breaks every 20 mins", "Practice deep breathing or simple neck stretches", "Maintain consistent sleep schedule"],
+      },
+      {
+        id: 3, title: "Joint Pain & Body Ache", emoji: "🦴",
+        color: "#F59E0B", bg: "#FFFBEB",
+        causes: "Inflammation, arthritis, overuse, deficiency of Vitamin D or calcium, weather changes",
+        remedies: [
+          { name: "Turmeric + Black Pepper Milk", desc: "Add ½ tsp turmeric and a pinch of black pepper to warm milk. Black pepper increases curcumin absorption by 2000%. Powerful natural anti-inflammatory." },
+          { name: "Castor Oil Massage", desc: "Warm castor oil and massage gently onto painful joints. Ricinoleic acid in castor oil deeply penetrates tissues and reduces inflammation." },
+          { name: "Epsom Salt Bath / Soak", desc: "Dissolve 2 cups Epsom salt in warm bathwater, soak for 20 minutes. Magnesium sulphate absorbs through skin and reduces muscle pain." },
+          { name: "Ginger & Sesame Oil Rub", desc: "Mix ginger juice with sesame oil, warm slightly, massage on joints. Gingerols block pain pathways. Sesame oil nourishes joints." },
+          { name: "Fenugreek (Methi) Seeds", desc: "Soak 1 tsp methi seeds overnight, eat in the morning. Rich in antioxidants and anti-inflammatory compounds. Regular use relieves arthritis pain." },
+        ],
+        tips: ["Avoid cold water baths during pain flare-ups", "Do gentle stretching exercises daily", "Get sunlight for 15–20 mins daily for Vitamin D"],
+      },
+      {
+        id: 4, title: "Constipation", emoji: "🌿",
+        color: "#10B981", bg: "#ECFDF5",
+        causes: "Low fibre diet, dehydration, sedentary lifestyle, stress, irregular eating habits",
+        remedies: [
+          { name: "Warm Lemon Water", desc: "Drink 1 glass of warm water with fresh lemon juice on an empty stomach each morning. Stimulates bile production and activates the digestive system." },
+          { name: "Triphala Powder", desc: "Take ½ tsp Triphala powder in warm water at bedtime. This Ayurvedic blend of 3 fruits regulates bowel movement naturally without dependency." },
+          { name: "Psyllium Husk (Isabgol)", desc: "Mix 1–2 tsp in a glass of warm water or milk at bedtime. Adds bulk to stool and promotes easy passage. Works gently overnight." },
+          { name: "Castor Oil (1 tsp)", desc: "Take 1 tsp castor oil with warm milk at bedtime occasionally (not daily). Ricinoleic acid stimulates intestinal muscles." },
+          { name: "High-Fibre Foods", desc: "Eat papaya, guava, sweet potato, flaxseed, and leafy vegetables daily. Natural fibre from whole foods is the most sustainable long-term solution." },
+        ],
+        tips: ["Drink at least 8–10 glasses of water daily", "Walk for 20–30 minutes after meals", "Never ignore the urge — regularity is trained by habit"],
+      },
+      {
+        id: 5, title: "Sleep Problems", emoji: "😴",
+        color: "#6366F1", bg: "#EEF2FF",
+        causes: "Stress, anxiety, irregular schedule, screen exposure, caffeine, nutritional deficiencies",
+        remedies: [
+          { name: "Ashwagandha Root", desc: "Take ½ tsp ashwagandha powder in warm milk at bedtime. Lowers cortisol (stress hormone), calms the nervous system, promotes deep restorative sleep." },
+          { name: "Nutmeg (Jaiphal) in Milk", desc: "Add a tiny pinch of nutmeg to warm milk with honey. Contains trimyristin — a natural sedative. Use in very small amounts only." },
+          { name: "Brahmi Tea or Oil", desc: "Drink brahmi tea before bed, or massage brahmi oil on scalp. Brahmi is a powerful adaptogen that calms brain activity and reduces anxiety." },
+          { name: "Warm Milk + Saffron", desc: "Add 2–3 strands of saffron to warm milk. Saffron increases serotonin levels naturally, improving sleep quality and mood." },
+          { name: "Foot Massage with Sesame Oil", desc: "Gently massage warm sesame oil on the soles of your feet before sleeping. Stimulates marma points, grounds excess energy (Vata), promotes calm." },
+        ],
+        tips: ["No screens 1 hour before bed", "Fix wake-up time — even on weekends", "Keep the bedroom cool, dark, and quiet"],
+      },
+      {
+        id: 6, title: "Acidity & Heartburn", emoji: "🔥",
+        color: "#EF4444", bg: "#FEF2F2",
+        causes: "Spicy food, irregular meals, stress, excess tea/coffee, obesity, lying down after eating",
+        remedies: [
+          { name: "Cold Milk or Buttermilk", desc: "Drink a glass of cold milk or chilled buttermilk with a pinch of roasted cumin and mint. Neutralises stomach acid instantly." },
+          { name: "Fennel Seeds (Saunf)", desc: "Chew 1 tsp saunf after meals or steep in hot water as tea. Phytonutrients in fennel prevent acid reflux and reduce bloating." },
+          { name: "Banana", desc: "Eat a ripe banana when acidity hits. High potassium content balances pH and creates a protective coating on the stomach lining." },
+          { name: "Coconut Water", desc: "Drink fresh tender coconut water. Naturally alkaline, rich in electrolytes, soothes the stomach lining and rebalances acid levels." },
+          { name: "Amla (Indian Gooseberry)", desc: "Eat raw amla, amla powder, or drink amla juice on an empty stomach. Extremely rich in Vitamin C, heals stomach lining and regulates acid production." },
+        ],
+        tips: ["Eat smaller meals; never skip meals", "Avoid lying down for 2 hours after eating", "Reduce tea, coffee, and fried food gradually"],
+      },
+      {
+        id: 7, title: "Skin Itching & Rashes", emoji: "🌸",
+        color: "#EC4899", bg: "#FDF2F8",
+        causes: "Allergies, dry skin, heat, insect bites, chemical exposure, fungal or bacterial infection",
+        remedies: [
+          { name: "Neem Paste or Neem Water Bath", desc: "Boil neem leaves in water, let cool, use to bathe or as a rinse. Neem is a powerful antibacterial, antifungal, and antipruritic herb." },
+          { name: "Coconut Oil + Turmeric", desc: "Mix coconut oil with a pinch of turmeric, apply on affected skin. Deeply moisturises, kills pathogens, and reduces inflammation naturally." },
+          { name: "Aloe Vera Gel", desc: "Apply fresh aloe vera gel directly on skin. Cooling, anti-inflammatory, speeds up skin repair. Ideal for heat rashes and sun-related irritation." },
+          { name: "Cold Compress or Ice Pack", desc: "Apply a cold, damp cloth to itchy area for 5–10 minutes. Numbs the itch sensation and reduces inflammation without any risk." },
+          { name: "Sandalwood + Rose Water Paste", desc: "Mix sandalwood powder with rose water, apply on skin. Traditionally used to soothe irritation, reduce redness, and cool burning skin." },
+        ],
+        tips: ["Wear loose cotton clothing, avoid synthetic fabrics", "Avoid scratching — it worsens inflammation and risks infection", "Keep skin moisturised with natural oils"],
+      },
+    ];
+
+    let activeIndex = 0;
+    let openRemedy = null;
+
+    /* ─── Build tab bar ─── */
+    function buildTabs() {
+      const bar = document.getElementById('tabBar');
+      bar.innerHTML = '';
+      remedies.forEach((r, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn' + (i === activeIndex ? ' active' : '');
+        btn.style.setProperty('--tab-color', r.color);
+        btn.innerHTML = `<span>${r.emoji}</span><span>${r.title.split(' ')[0]}</span>`;
+        btn.addEventListener('click', () => {
+          activeIndex = i;
+          openRemedy = null;
+          buildTabs();
+          buildContent();
+        });
+        bar.appendChild(btn);
+      });
+    }
+
+    /* ─── Build main content ─── */
+    function buildContent() {
+      const r = remedies[activeIndex];
+      const main = document.getElementById('mainContent');
+      main.style.setProperty('--accent', r.color);
+
+      // condition card
+      const condCard = `
+        <div class="condition-card" style="background:${r.bg}; border-color:${r.color}22;">
+          <div class="big-emoji">${r.emoji}</div>
+          <div>
+            <h2 style="color:${r.color};">${r.title}</h2>
+            <p><strong>Common causes:</strong> ${r.causes}</p>
+          </div>
+        </div>
+      `;
+
+      // section label
+      const sectionLabel = `
+        <div class="section-label">
+          <span class="dot" style="color:${r.color};">✦</span> Natural Remedies
+        </div>
+      `;
+
+      // remedy items
+      const remedyItems = r.remedies.map((rem, i) => `
+        <div class="remedy-item${openRemedy === i ? ' open' : ''}" data-idx="${i}">
+          <div class="remedy-header">
+            <div class="remedy-left">
+              <span class="remedy-num" style="background:${r.color};">${i + 1}</span>
+              <span class="remedy-name">${rem.name}</span>
+            </div>
+            <span class="remedy-toggle" style="color:${r.color};">${openRemedy === i ? '−' : '+'}</span>
+          </div>
+          <p class="remedy-desc">${rem.desc}</p>
+        </div>
+      `).join('');
+
+      // tips
+      const tipRows = r.tips.map(t => `
+        <div class="tip-row">
+          <span class="tip-arrow" style="color:${r.color};">→</span>
+          <span class="tip-text">${t}</span>
+        </div>
+      `).join('');
+
+      const tipsBox = `
+        <div class="tips-box" style="background:linear-gradient(135deg,${r.color}18,${r.color}08); border-color:${r.color}33;">
+          <h4 style="color:${r.color};">💡 Lifestyle Tips</h4>
+          ${tipRows}
+        </div>
+      `;
+
+      const disclaimer = `
+        <p class="disclaimer">
+          These are traditional wellness remedies for general use.<br>
+          Please consult a qualified doctor for persistent or severe symptoms.
+        </p>
+      `;
+
+      main.innerHTML = condCard + sectionLabel +
+        `<div class="remedy-list">${remedyItems}</div>` +
+        tipsBox + disclaimer;
+
+      // attach toggle listeners
+      main.querySelectorAll('.remedy-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const idx = parseInt(el.dataset.idx);
+          openRemedy = openRemedy === idx ? null : idx;
+          buildContent();
+        });
+      });
+    }
+
+    // Init
+    buildTabs();
+    buildContent();
+  </script>
+</body>
+</html>

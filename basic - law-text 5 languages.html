@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Law Textbook | Velu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Sans+Tamil&family=Noto+Sans+Malayalam&family=Noto+Sans+Kannada&family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97e;
+    --navy: #0b1a2e;
+    --navy-mid: #112240;
+    --navy-light: #1a3a5c;
+    --cream: #f5f0e8;
+    --cream-dark: #ede4d0;
+    --text: #1a1208;
+    --white: #ffffff;
+    --shadow: 0 8px 40px rgba(0,0,0,0.35);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--navy);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── LANGUAGE BAR ── */
+  .lang-bar {
+    position: sticky; top: 0; z-index: 999;
+    background: rgba(11,26,46,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 24px;
+  }
+  .lang-bar .site-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .lang-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .lang-btn {
+    padding: 5px 14px; border-radius: 20px; border: 1.5px solid rgba(201,168,76,0.4);
+    background: transparent; color: var(--cream); cursor: pointer;
+    font-size: 0.82rem; transition: all 0.25s;
+    font-family: inherit;
+  }
+  .lang-btn:hover, .lang-btn.active {
+    background: var(--gold); color: var(--navy); border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(26,58,92,0.8) 0%, transparent 60%),
+      linear-gradient(160deg, #0b1a2e 0%, #112240 50%, #0d2137 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 100px 24px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '⚖';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 500px; opacity: 0.025;
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 900px; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    animation: fadeUp 1s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(40px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .hero-text { }
+  .hero-badge {
+    display: inline-block;
+    padding: 4px 16px; border: 1px solid var(--gold);
+    border-radius: 20px; font-size: 0.78rem;
+    color: var(--gold); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .hero-title span { color: var(--gold); }
+  .hero-subtitle {
+    font-size: 1.35rem; font-weight: 300;
+    color: rgba(245,240,232,0.75);
+    margin-bottom: 28px; line-height: 1.6;
+  }
+  .hero-desc {
+    font-size: 1.05rem; line-height: 1.8;
+    color: rgba(245,240,232,0.65);
+    margin-bottom: 36px;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 14px 36px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; text-decoration: none;
+    border-radius: 4px; letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+    transition: all 0.3s; border: none; cursor: pointer;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.6);
+  }
+  .btn-secondary {
+    display: inline-block; margin-left: 16px;
+    padding: 13px 28px; border: 1.5px solid var(--gold);
+    color: var(--gold); font-size: 1rem;
+    text-decoration: none; border-radius: 4px;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover {
+    background: rgba(201,168,76,0.1);
+  }
+
+  /* Profile Card */
+  .profile-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 16px; padding: 32px 28px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    animation: fadeUp 1.2s 0.2s ease both;
+  }
+  .profile-img-wrap {
+    width: 120px; height: 120px; margin: 0 auto 20px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    overflow: hidden;
+    background: var(--navy-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    box-shadow: 0 0 0 6px rgba(201,168,76,0.15);
+  }
+  .profile-img-wrap img { width:100%; height:100%; object-fit:cover; }
+  .profile-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--white); margin-bottom: 4px;
+  }
+  .profile-role {
+    font-size: 0.9rem; color: var(--gold);
+    letter-spacing: 1px; margin-bottom: 20px;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 10px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none; color: var(--cream);
+    font-size: 0.88rem; transition: all 0.2s;
+  }
+  .contact-link:hover { background: rgba(201,168,76,0.12); border-color: var(--gold); }
+  .contact-icon { font-size: 1.1rem; width: 22px; text-align:center; }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 24px; }
+  .container { max-width: 960px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; color: var(--white);
+    line-height: 1.2; margin-bottom: 20px;
+  }
+  .section-body {
+    font-size: 1.1rem; line-height: 1.9;
+    color: rgba(245,240,232,0.72); max-width: 640px;
+  }
+  .divider {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin: 20px 0 32px;
+  }
+
+  /* ── TOPICS ── */
+  .topics-bg { background: var(--navy-mid); }
+  .topics-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px; margin-top: 40px;
+  }
+  .topic-card {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(201,168,76,0.18);
+    border-radius: 12px; padding: 24px 20px;
+    transition: all 0.3s;
+  }
+  .topic-card:hover {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+    transform: translateY(-4px);
+  }
+  .topic-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900;
+    color: rgba(201,168,76,0.2); margin-bottom: 8px;
+  }
+  .topic-title { font-size: 1rem; font-weight: 600; color: var(--white); }
+  .topic-desc { font-size: 0.88rem; color: rgba(245,240,232,0.55); margin-top: 6px; }
+
+  /* ── PRICING ── */
+  .pricing-bg {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 70%),
+      var(--navy);
+  }
+  .price-card {
+    max-width: 480px; margin: 40px auto 0;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--gold);
+    border-radius: 20px; padding: 48px 40px;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(201,168,76,0.12);
+  }
+  .price-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; font-weight: 900; color: var(--gold);
+    line-height: 1;
+  }
+  .price-currency { font-size: 2.5rem; vertical-align: super; }
+  .price-period { font-size: 1rem; color: rgba(245,240,232,0.5); margin-bottom: 28px; }
+  .price-features { list-style: none; margin-bottom: 36px; }
+  .price-features li {
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+    font-size: 1rem; color: rgba(245,240,232,0.8);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .price-features li::before { content: '✦'; color: var(--gold); font-size: 0.7rem; }
+
+  /* ── YOUTUBE ── */
+  .yt-section { background: var(--navy-mid); }
+  .yt-card {
+    display: flex; align-items: center; gap: 32px;
+    background: rgba(255,0,0,0.06);
+    border: 1px solid rgba(255,80,80,0.25);
+    border-radius: 16px; padding: 36px 40px;
+    margin-top: 40px; max-width: 680px;
+    transition: all 0.3s;
+  }
+  .yt-card:hover {
+    border-color: #ff4444;
+    background: rgba(255,0,0,0.1);
+  }
+  .yt-icon { font-size: 4rem; flex-shrink: 0; }
+  .yt-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; color: var(--white);
+    margin-bottom: 6px;
+  }
+  .yt-handle { color: #ff6b6b; font-size: 1rem; margin-bottom: 10px; }
+  .yt-desc { font-size: 0.95rem; color: rgba(245,240,232,0.6); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #060e1a;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--gold); margin-bottom: 12px;
+  }
+  .footer-copy {
+    font-size: 0.85rem; color: rgba(245,240,232,0.35);
+  }
+
+  /* ── MULTILINGUAL FONTS ── */
+  .lang-ta { font-family: 'Noto Sans Tamil', 'Crimson Pro', serif; }
+  .lang-ml { font-family: 'Noto Sans Malayalam', 'Crimson Pro', serif; }
+  .lang-kn { font-family: 'Noto Sans Kannada', 'Crimson Pro', serif; }
+  .lang-te { font-family: 'Noto Sans Telugu', 'Crimson Pro', serif; }
+  .lang-en { font-family: 'Crimson Pro', Georgia, serif; }
+
+  /* Hidden by default */
+  .content { display: none; }
+  .content.active { display: block; }
+
+  @media (max-width: 700px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .yt-card { flex-direction: column; gap: 16px; padding: 24px; }
+    .price-card { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<nav class="lang-bar">
+  <div class="site-title">⚖ Basic Law Textbook</div>
+  <div class="lang-btns">
+    <button class="lang-btn active" onclick="setLang('en')">🇬🇧 English</button>
+    <button class="lang-btn" onclick="setLang('ta')">தமிழ்</button>
+    <button class="lang-btn" onclick="setLang('ml')">മലയാളം</button>
+    <button class="lang-btn" onclick="setLang('kn')">ಕನ್ನಡ</button>
+    <button class="lang-btn" onclick="setLang('te')">తెలుగు</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ ENGLISH ═══════════════ -->
+<div class="content lang-en active" id="content-en">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">⚖ Legal Education</div>
+        <h1 class="hero-title">Basic <span>Law</span> Textbook</h1>
+        <p class="hero-subtitle">Your Complete Guide to Fundamental Legal Principles</p>
+        <p class="hero-desc">Master the foundation of law with clear, simple explanations designed for students, citizens, and anyone seeking to understand their legal rights and duties.</p>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary">📖 Get the Book — ₹99</a>
+      </div>
+      <div class="profile-card">
+        <div class="profile-img-wrap">👨‍⚖️</div>
+        <div class="profile-name">Velu</div>
+        <div class="profile-role">Legal Educator & Author</div>
+        <div class="contact-links">
+          <a href="https://wa.me/919444318208" target="_blank" class="contact-link">
+            <span class="contact-icon">💬</span> WhatsApp: +91 94443 18208
+          </a>
+          <a href="mailto:srveli61@gmail.com" class="contact-link">
+            <span class="contact-icon">✉️</span> srveli61@gmail.com
+          </a>
+          <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" class="contact-link">
+            <span class="contact-icon">▶️</span> VELUGEETHA Official
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="topics-bg">
+    <div class="container">
+      <div class="section-label">What You Will Learn</div>
+      <h2 class="section-title">Topics Covered</h2>
+      <div class="divider"></div>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-num">01</div><div class="topic-title">Constitution of India</div><div class="topic-desc">Fundamental Rights, Duties & Directive Principles</div></div>
+        <div class="topic-card"><div class="topic-num">02</div><div class="topic-title">Civil Law Basics</div><div class="topic-desc">Property, Contracts, and Civil Disputes</div></div>
+        <div class="topic-card"><div class="topic-num">03</div><div class="topic-title">Criminal Law</div><div class="topic-desc">IPC, CrPC and the criminal justice system</div></div>
+        <div class="topic-card"><div class="topic-num">04</div><div class="topic-title">Consumer Rights</div><div class="topic-desc">Know your rights as a consumer</div></div>
+        <div class="topic-card"><div class="topic-num">05</div><div class="topic-title">Family Law</div><div class="topic-desc">Marriage, Divorce, Succession & Adoption</div></div>
+        <div class="topic-card"><div class="topic-num">06</div><div class="topic-title">Labour Law</div><div class="topic-desc">Employee rights, wages & workplace protection</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-bg">
+    <div class="container" style="text-align:center;">
+      <div class="section-label">Affordable Access</div>
+      <h2 class="section-title">Get the Textbook</h2>
+      <div class="divider" style="margin:20px auto 32px;"></div>
+      <div class="price-card">
+        <div class="price-amount"><span class="price-currency">₹</span>99</div>
+        <div class="price-period">One-time payment · Instant access</div>
+        <ul class="price-features">
+          <li>Complete law textbook in 5 languages</li>
+          <li>Easy-to-understand explanations</li>
+          <li>Real-life case examples</li>
+          <li>Suitable for students & citizens</li>
+          <li>Lifetime access after purchase</li>
+        </ul>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary" style="font-size:1.1rem; padding:16px 48px;">
+          💳 Buy Now — ₹99
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="yt-section">
+    <div class="container">
+      <div class="section-label">Watch & Learn</div>
+      <h2 class="section-title">YouTube Channel</h2>
+      <div class="divider"></div>
+      <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" style="text-decoration:none;">
+        <div class="yt-card">
+          <div class="yt-icon">▶️</div>
+          <div>
+            <div class="yt-name">VELUGEETHA</div>
+            <div class="yt-handle">@velugeethaofficial</div>
+            <div class="yt-desc">Watch free law education videos, simplified legal concepts, and citizen rights explained in simple language. Subscribe for regular updates!</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">⚖ Basic Law Textbook</div>
+    <p class="footer-copy">© 2024 Velu · srveli61@gmail.com · +91 94443 18208</p>
+  </footer>
+</div>
+
+<!-- ═══════════════ TAMIL ═══════════════ -->
+<div class="content lang-ta" id="content-ta">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">⚖ சட்டக் கல்வி</div>
+        <h1 class="hero-title">அடிப்படை <span>சட்ட</span> பாடப்புத்தகம்</h1>
+        <p class="hero-subtitle">சட்டத்தின் அடிப்படைக் கொள்கைகளுக்கான உங்கள் முழுமையான வழிகாட்டி</p>
+        <p class="hero-desc">மாணவர்கள், குடிமக்கள் மற்றும் தங்கள் சட்டரீதியான உரிமைகளை அறிய விரும்புவோருக்காக எளிய விளக்கங்களுடன் சட்டத்தின் அடிப்படையை கற்றுக்கொள்ளுங்கள்.</p>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary">📖 புத்தகம் வாங்கவும் — ₹99</a>
+      </div>
+      <div class="profile-card">
+        <div class="profile-img-wrap">👨‍⚖️</div>
+        <div class="profile-name">வேலு</div>
+        <div class="profile-role">சட்ட கல்வியாளர் மற்றும் ஆசிரியர்</div>
+        <div class="contact-links">
+          <a href="https://wa.me/919444318208" target="_blank" class="contact-link">
+            <span class="contact-icon">💬</span> வாட்ஸ்அப்: +91 94443 18208
+          </a>
+          <a href="mailto:srveli61@gmail.com" class="contact-link">
+            <span class="contact-icon">✉️</span> srveli61@gmail.com
+          </a>
+          <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" class="contact-link">
+            <span class="contact-icon">▶️</span> VELUGEETHA Official
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="topics-bg">
+    <div class="container">
+      <div class="section-label">நீங்கள் கற்றுக்கொள்வது</div>
+      <h2 class="section-title">உள்ளடக்கிய தலைப்புகள்</h2>
+      <div class="divider"></div>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-num">01</div><div class="topic-title">இந்திய அரசியலமைப்பு</div><div class="topic-desc">அடிப்படை உரிமைகள், கடமைகள் மற்றும் வழிகாட்டு கொள்கைகள்</div></div>
+        <div class="topic-card"><div class="topic-num">02</div><div class="topic-title">சிவில் சட்டம்</div><div class="topic-desc">சொத்து, ஒப்பந்தங்கள் மற்றும் சிவில் தகராறுகள்</div></div>
+        <div class="topic-card"><div class="topic-num">03</div><div class="topic-title">குற்றவியல் சட்டம்</div><div class="topic-desc">IPC, CrPC மற்றும் குற்றவியல் நீதி முறை</div></div>
+        <div class="topic-card"><div class="topic-num">04</div><div class="topic-title">நுகர்வோர் உரிமைகள்</div><div class="topic-desc">நுகர்வோராக உங்கள் உரிமைகளை அறியுங்கள்</div></div>
+        <div class="topic-card"><div class="topic-num">05</div><div class="topic-title">குடும்ப சட்டம்</div><div class="topic-desc">திருமணம், விவாகரத்து, வாரிசு மற்றும் தத்தெடுப்பு</div></div>
+        <div class="topic-card"><div class="topic-num">06</div><div class="topic-title">தொழிலாளர் சட்டம்</div><div class="topic-desc">ஊழியர் உரிமைகள், கூலி மற்றும் பணியிட பாதுகாப்பு</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-bg">
+    <div class="container" style="text-align:center;">
+      <div class="section-label">சாதகமான கட்டணம்</div>
+      <h2 class="section-title">பாடப்புத்தகம் பெறுங்கள்</h2>
+      <div class="divider" style="margin:20px auto 32px;"></div>
+      <div class="price-card">
+        <div class="price-amount"><span class="price-currency">₹</span>99</div>
+        <div class="price-period">ஒரு முறை கட்டணம் · உடனடி அணுகல்</div>
+        <ul class="price-features">
+          <li>5 மொழிகளில் முழுமையான சட்டப் புத்தகம்</li>
+          <li>எளிதில் புரியும் விளக்கங்கள்</li>
+          <li>நிஜ வாழ்க்கை வழக்கு உதாரணங்கள்</li>
+          <li>மாணவர்கள் மற்றும் குடிமக்களுக்கு ஏற்றது</li>
+          <li>வாங்கிய பிறகு வாழ்நாள் அணுகல்</li>
+        </ul>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary" style="font-size:1.1rem; padding:16px 48px;">
+          💳 இப்போது வாங்கவும் — ₹99
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="yt-section">
+    <div class="container">
+      <div class="section-label">பார்த்து கற்றுக்கொள்ளுங்கள்</div>
+      <h2 class="section-title">யூட்யூப் சேனல்</h2>
+      <div class="divider"></div>
+      <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" style="text-decoration:none;">
+        <div class="yt-card">
+          <div class="yt-icon">▶️</div>
+          <div>
+            <div class="yt-name">VELUGEETHA</div>
+            <div class="yt-handle">@velugeethaofficial</div>
+            <div class="yt-desc">இலவச சட்டக் கல்வி வீடியோக்கள், எளிமையான சட்ட கருத்துக்கள் மற்றும் குடிமக்கள் உரிமைகளை எளிய மொழியில் புரிந்துகொள்ளுங்கள். தொடர்ந்து புதுப்பிப்புகளுக்கு சந்தா செலுத்துங்கள்!</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">⚖ அடிப்படை சட்ட பாடப்புத்தகம்</div>
+    <p class="footer-copy">© 2024 வேலு · srveli61@gmail.com · +91 94443 18208</p>
+  </footer>
+</div>
+
+<!-- ═══════════════ MALAYALAM ═══════════════ -->
+<div class="content lang-ml" id="content-ml">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">⚖ നിയമ വിദ്യാഭ്യാസം</div>
+        <h1 class="hero-title">അടിസ്ഥാന <span>നിയമ</span> പാഠപ്പുസ്തകം</h1>
+        <p class="hero-subtitle">മൗലിക നിയമ തത്ത്വങ്ങൾക്കുള്ള നിങ്ങളുടെ സമ്പൂർണ്ണ ഗൈഡ്</p>
+        <p class="hero-desc">വിദ്യാർത്ഥികൾക്കും പൗരന്മാർക്കും നിയമ അവകാശങ്ങൾ അറിയാൻ ആഗ്രഹിക്കുന്ന എല്ലാവർക്കും ലളിതമായ വിശദീകരണങ്ങളിലൂടെ നിയമത്തിന്റെ അടിത്തറ മനസ്സിലാക്കുക.</p>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary">📖 പുസ്തകം വാങ്ങുക — ₹99</a>
+      </div>
+      <div class="profile-card">
+        <div class="profile-img-wrap">👨‍⚖️</div>
+        <div class="profile-name">വേലു</div>
+        <div class="profile-role">നിയമ അദ്ധ്യാപകൻ & രചയിതാവ്</div>
+        <div class="contact-links">
+          <a href="https://wa.me/919444318208" target="_blank" class="contact-link">
+            <span class="contact-icon">💬</span> WhatsApp: +91 94443 18208
+          </a>
+          <a href="mailto:srveli61@gmail.com" class="contact-link">
+            <span class="contact-icon">✉️</span> srveli61@gmail.com
+          </a>
+          <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" class="contact-link">
+            <span class="contact-icon">▶️</span> VELUGEETHA Official
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="topics-bg">
+    <div class="container">
+      <div class="section-label">നിങ്ങൾ പഠിക്കുന്നത്</div>
+      <h2 class="section-title">ഉൾക്കൊള്ളിച്ച വിഷയങ്ങൾ</h2>
+      <div class="divider"></div>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-num">01</div><div class="topic-title">ഇന്ത്യൻ ഭരണഘടന</div><div class="topic-desc">മൗലിക അവകാശങ്ങൾ, കർത്തവ്യങ്ങൾ & നിർദ്ദേശക തത്ത്വങ്ങൾ</div></div>
+        <div class="topic-card"><div class="topic-num">02</div><div class="topic-title">സിവിൽ നിയമം</div><div class="topic-desc">സ്വത്ത്, കരാറുകൾ, സിവിൽ തർക്കങ്ങൾ</div></div>
+        <div class="topic-card"><div class="topic-num">03</div><div class="topic-title">ക്രിമിനൽ നിയമം</div><div class="topic-desc">IPC, CrPC, ക്രിമിനൽ നീതി വ്യവസ്ഥ</div></div>
+        <div class="topic-card"><div class="topic-num">04</div><div class="topic-title">ഉപഭോക്തൃ അവകാശങ്ങൾ</div><div class="topic-desc">ഉപഭോക്താവ് എന്ന നിലയിൽ നിങ്ങളുടെ അവകാശങ്ങൾ</div></div>
+        <div class="topic-card"><div class="topic-num">05</div><div class="topic-title">കുടുംബ നിയമം</div><div class="topic-desc">വിവാഹം, വിവാഹമോചനം, പിന്തുടർച്ചാ നിയമം</div></div>
+        <div class="topic-card"><div class="topic-num">06</div><div class="topic-title">തൊഴിൽ നിയമം</div><div class="topic-desc">ജീവനക്കാരുടെ അവകാശങ്ങൾ, കൂലി, തൊഴിൽ സ്ഥല സംരക്ഷണം</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-bg">
+    <div class="container" style="text-align:center;">
+      <div class="section-label">താങ്ങാനാവുന്ന വില</div>
+      <h2 class="section-title">പാഠപ്പുസ്തകം നേടുക</h2>
+      <div class="divider" style="margin:20px auto 32px;"></div>
+      <div class="price-card">
+        <div class="price-amount"><span class="price-currency">₹</span>99</div>
+        <div class="price-period">ഒറ്റത്തവണ പേയ്മെന്റ് · ഉടനടി ആക്സസ്</div>
+        <ul class="price-features">
+          <li>5 ഭാഷകളിൽ സമ്പൂർണ്ണ നിയമ പുസ്തകം</li>
+          <li>എളുപ്പത്തിൽ മനസ്സിലാകുന്ന വിശദീകരണങ്ങൾ</li>
+          <li>യഥാർത്ഥ ജീവിത കേസ് ഉദാഹരണങ്ങൾ</li>
+          <li>വിദ്യാർത്ഥികൾക്കും പൗരന്മാർക്കും അനുയോജ്യം</li>
+          <li>വാങ്ങിയ ശേഷം ആജീവനാന്ത ആക്സസ്</li>
+        </ul>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary" style="font-size:1.1rem; padding:16px 48px;">
+          💳 ഇപ്പോൾ വാങ്ങുക — ₹99
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="yt-section">
+    <div class="container">
+      <div class="section-label">കണ്ട് പഠിക്കൂ</div>
+      <h2 class="section-title">YouTube ചാനൽ</h2>
+      <div class="divider"></div>
+      <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" style="text-decoration:none;">
+        <div class="yt-card">
+          <div class="yt-icon">▶️</div>
+          <div>
+            <div class="yt-name">VELUGEETHA</div>
+            <div class="yt-handle">@velugeethaofficial</div>
+            <div class="yt-desc">സൗജന്യ നിയമ വിദ്യാഭ്യാസ വീഡിയോകൾ, ലളിതമായ നിയമ ആശയങ്ങൾ, പൗരന്മാരുടെ അവകാശങ്ങൾ. പതിവ് അപ്‌ഡേറ്റുകൾക്ക് സബ്‌സ്‌ക്രൈബ് ചെയ്യൂ!</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">⚖ അടിസ്ഥാന നിയമ പാഠപ്പുസ്തകം</div>
+    <p class="footer-copy">© 2024 വേലു · srveli61@gmail.com · +91 94443 18208</p>
+  </footer>
+</div>
+
+<!-- ═══════════════ KANNADA ═══════════════ -->
+<div class="content lang-kn" id="content-kn">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">⚖ ಕಾನೂನು ಶಿಕ್ಷಣ</div>
+        <h1 class="hero-title">ಮೂಲ <span>ಕಾನೂನು</span> ಪಠ್ಯಪುಸ್ತಕ</h1>
+        <p class="hero-subtitle">ಮೂಲಭೂತ ಕಾನೂನು ತತ್ವಗಳಿಗಾಗಿ ನಿಮ್ಮ ಸಂಪೂರ್ಣ ಮಾರ್ಗದರ್ಶಿ</p>
+        <p class="hero-desc">ವಿದ್ಯಾರ್ಥಿಗಳು, ನಾಗರಿಕರು ಮತ್ತು ತಮ್ಮ ಕಾನೂನು ಹಕ್ಕುಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಬಯಸುವ ಎಲ್ಲರಿಗಾಗಿ ಸರಳ ವಿವರಣೆಗಳೊಂದಿಗೆ ಕಾನೂನಿನ ಆಧಾರವನ್ನು ಕಲಿಯಿರಿ.</p>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary">📖 ಪುಸ್ತಕ ಖರೀದಿಸಿ — ₹99</a>
+      </div>
+      <div class="profile-card">
+        <div class="profile-img-wrap">👨‍⚖️</div>
+        <div class="profile-name">ವೇಲು</div>
+        <div class="profile-role">ಕಾನೂನು ಶಿಕ್ಷಕ & ಲೇಖಕ</div>
+        <div class="contact-links">
+          <a href="https://wa.me/919444318208" target="_blank" class="contact-link">
+            <span class="contact-icon">💬</span> WhatsApp: +91 94443 18208
+          </a>
+          <a href="mailto:srveli61@gmail.com" class="contact-link">
+            <span class="contact-icon">✉️</span> srveli61@gmail.com
+          </a>
+          <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" class="contact-link">
+            <span class="contact-icon">▶️</span> VELUGEETHA Official
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="topics-bg">
+    <div class="container">
+      <div class="section-label">ನೀವು ಕಲಿಯುವುದು</div>
+      <h2 class="section-title">ಒಳಗೊಂಡಿರುವ ವಿಷಯಗಳು</h2>
+      <div class="divider"></div>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-num">01</div><div class="topic-title">ಭಾರತದ ಸಂವಿಧಾನ</div><div class="topic-desc">ಮೂಲಭೂತ ಹಕ್ಕುಗಳು, ಕರ್ತವ್ಯಗಳು ಮತ್ತು ಮಾರ್ಗದರ್ಶಕ ತತ್ವಗಳು</div></div>
+        <div class="topic-card"><div class="topic-num">02</div><div class="topic-title">ನಾಗರಿಕ ಕಾನೂನು</div><div class="topic-desc">ಆಸ್ತಿ, ಒಪ್ಪಂದಗಳು ಮತ್ತು ನಾಗರಿಕ ವಿವಾದಗಳು</div></div>
+        <div class="topic-card"><div class="topic-num">03</div><div class="topic-title">ಕ್ರಿಮಿನಲ್ ಕಾನೂನು</div><div class="topic-desc">IPC, CrPC ಮತ್ತು ಅಪರಾಧ ನ್ಯಾಯ ವ್ಯವಸ್ಥೆ</div></div>
+        <div class="topic-card"><div class="topic-num">04</div><div class="topic-title">ಗ್ರಾಹಕ ಹಕ್ಕುಗಳು</div><div class="topic-desc">ಗ್ರಾಹಕನಾಗಿ ನಿಮ್ಮ ಹಕ್ಕುಗಳನ್ನು ತಿಳಿಯಿರಿ</div></div>
+        <div class="topic-card"><div class="topic-num">05</div><div class="topic-title">ಕುಟುಂಬ ಕಾನೂನು</div><div class="topic-desc">ವಿವಾಹ, ವಿಚ್ಛೇದನ, ಉತ್ತರಾಧಿಕಾರ ಮತ್ತು ದತ್ತಕ</div></div>
+        <div class="topic-card"><div class="topic-num">06</div><div class="topic-title">ಕಾರ್ಮಿಕ ಕಾನೂನು</div><div class="topic-desc">ಉದ್ಯೋಗಿ ಹಕ್ಕುಗಳು, ವೇತನ ಮತ್ತು ಕಾರ್ಯಸ್ಥಳ ರಕ್ಷಣೆ</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-bg">
+    <div class="container" style="text-align:center;">
+      <div class="section-label">ಕೈಗೆಟುಕುವ ಬೆಲೆ</div>
+      <h2 class="section-title">ಪಠ್ಯಪುಸ್ತಕ ಪಡೆಯಿರಿ</h2>
+      <div class="divider" style="margin:20px auto 32px;"></div>
+      <div class="price-card">
+        <div class="price-amount"><span class="price-currency">₹</span>99</div>
+        <div class="price-period">ಒಂದು ಬಾರಿ ಪಾವತಿ · ತಕ್ಷಣ ಪ್ರವೇಶ</div>
+        <ul class="price-features">
+          <li>5 ಭಾಷೆಗಳಲ್ಲಿ ಸಂಪೂರ್ಣ ಕಾನೂನು ಪಠ್ಯಪುಸ್ತಕ</li>
+          <li>ಸುಲಭವಾಗಿ ಅರ್ಥವಾಗುವ ವಿವರಣೆಗಳು</li>
+          <li>ನೈಜ ಜೀವನ ಪ್ರಕರಣ ಉದಾಹರಣೆಗಳು</li>
+          <li>ವಿದ್ಯಾರ್ಥಿಗಳು ಮತ್ತು ನಾಗರಿಕರಿಗೆ ಸೂಕ್ತ</li>
+          <li>ಖರೀದಿಸಿದ ನಂತರ ಜೀವನಾದ್ಯಂತ ಪ್ರವೇಶ</li>
+        </ul>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary" style="font-size:1.1rem; padding:16px 48px;">
+          💳 ಈಗಲೇ ಖರೀದಿಸಿ — ₹99
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="yt-section">
+    <div class="container">
+      <div class="section-label">ನೋಡಿ ಕಲಿಯಿರಿ</div>
+      <h2 class="section-title">YouTube ಚಾನೆಲ್</h2>
+      <div class="divider"></div>
+      <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" style="text-decoration:none;">
+        <div class="yt-card">
+          <div class="yt-icon">▶️</div>
+          <div>
+            <div class="yt-name">VELUGEETHA</div>
+            <div class="yt-handle">@velugeethaofficial</div>
+            <div class="yt-desc">ಉಚಿತ ಕಾನೂನು ಶಿಕ್ಷಣ ವಿಡಿಯೋಗಳು, ಸರಳ ಕಾನೂನು ಪರಿಕಲ್ಪನೆಗಳು, ನಾಗರಿಕ ಹಕ್ಕುಗಳನ್ನು ಸರಳ ಭಾಷೆಯಲ್ಲಿ ವಿವರಿಸಲಾಗಿದೆ. ನಿಯಮಿತ ಅಪ್‌ಡೇಟ್‌ಗಳಿಗೆ ಸಬ್‌ಸ್ಕ್ರೈಬ್ ಮಾಡಿ!</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">⚖ ಮೂಲ ಕಾನೂನು ಪಠ್ಯಪುಸ್ತಕ</div>
+    <p class="footer-copy">© 2024 ವೇಲು · srveli61@gmail.com · +91 94443 18208</p>
+  </footer>
+</div>
+
+<!-- ═══════════════ TELUGU ═══════════════ -->
+<div class="content lang-te" id="content-te">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">⚖ న్యాయ విద్య</div>
+        <h1 class="hero-title">ప్రాథమిక <span>చట్ట</span> పాఠ్యపుస్తకం</h1>
+        <p class="hero-subtitle">మౌలిక న్యాయ సూత్రాలకు మీ సంపూర్ణ మార్గదర్శి</p>
+        <p class="hero-desc">విద్యార్థులు, పౌరులు మరియు తమ చట్టపరమైన హక్కులను అర్థం చేసుకోవాలనుకునే వారందరికీ సరళమైన వివరణలతో చట్టపు పునాదిని నేర్చుకోండి.</p>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary">📖 పుస్తకం కొనుగోలు చేయండి — ₹99</a>
+      </div>
+      <div class="profile-card">
+        <div class="profile-img-wrap">👨‍⚖️</div>
+        <div class="profile-name">వేలు</div>
+        <div class="profile-role">న్యాయ విద్యావేత్త & రచయిత</div>
+        <div class="contact-links">
+          <a href="https://wa.me/919444318208" target="_blank" class="contact-link">
+            <span class="contact-icon">💬</span> WhatsApp: +91 94443 18208
+          </a>
+          <a href="mailto:srveli61@gmail.com" class="contact-link">
+            <span class="contact-icon">✉️</span> srveli61@gmail.com
+          </a>
+          <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" class="contact-link">
+            <span class="contact-icon">▶️</span> VELUGEETHA Official
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="topics-bg">
+    <div class="container">
+      <div class="section-label">మీరు నేర్చుకునేది</div>
+      <h2 class="section-title">అంశాలు</h2>
+      <div class="divider"></div>
+      <div class="topics-grid">
+        <div class="topic-card"><div class="topic-num">01</div><div class="topic-title">భారత రాజ్యాంగం</div><div class="topic-desc">ప్రాథమిక హక్కులు, విధులు & ఆదేశ సూత్రాలు</div></div>
+        <div class="topic-card"><div class="topic-num">02</div><div class="topic-title">సివిల్ చట్టం</div><div class="topic-desc">ఆస్తి, ఒప్పందాలు మరియు సివిల్ వివాదాలు</div></div>
+        <div class="topic-card"><div class="topic-num">03</div><div class="topic-title">నేర చట్టం</div><div class="topic-desc">IPC, CrPC మరియు నేర న్యాయ వ్యవస్థ</div></div>
+        <div class="topic-card"><div class="topic-num">04</div><div class="topic-title">వినియోగదారు హక్కులు</div><div class="topic-desc">వినియోగదారుడిగా మీ హక్కులను తెలుసుకోండి</div></div>
+        <div class="topic-card"><div class="topic-num">05</div><div class="topic-title">కుటుంబ చట్టం</div><div class="topic-desc">వివాహం, విడాకులు, వారసత్వం మరియు దత్తత</div></div>
+        <div class="topic-card"><div class="topic-num">06</div><div class="topic-title">కార్మిక చట్టం</div><div class="topic-desc">ఉద్యోగి హక్కులు, వేతనాలు & కార్యాలయ రక్షణ</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-bg">
+    <div class="container" style="text-align:center;">
+      <div class="section-label">అందుబాటు ధర</div>
+      <h2 class="section-title">పాఠ్యపుస్తకం పొందండి</h2>
+      <div class="divider" style="margin:20px auto 32px;"></div>
+      <div class="price-card">
+        <div class="price-amount"><span class="price-currency">₹</span>99</div>
+        <div class="price-period">ఒక్కసారి చెల్లింపు · వెంటనే యాక్సెస్</div>
+        <ul class="price-features">
+          <li>5 భాషలలో పూర్తి న్యాయ పాఠ్యపుస్తకం</li>
+          <li>సులభంగా అర్థమయ్యే వివరణలు</li>
+          <li>వాస్తవ జీవితపు కేసు ఉదాహరణలు</li>
+          <li>విద్యార్థులకు & పౌరులకు అనుకూలం</li>
+          <li>కొనుగోలు తర్వాత జీవితకాల యాక్సెస్</li>
+        </ul>
+        <a href="https://rzp.io/rzp/Hev5IGE" target="_blank" class="btn-primary" style="font-size:1.1rem; padding:16px 48px;">
+          💳 ఇప్పుడే కొనుగోలు చేయండి — ₹99
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="yt-section">
+    <div class="container">
+      <div class="section-label">చూసి నేర్చుకోండి</div>
+      <h2 class="section-title">YouTube చానల్</h2>
+      <div class="divider"></div>
+      <a href="https://www.youtube.com/@velugeethaofficial" target="_blank" style="text-decoration:none;">
+        <div class="yt-card">
+          <div class="yt-icon">▶️</div>
+          <div>
+            <div class="yt-name">VELUGEETHA</div>
+            <div class="yt-handle">@velugeethaofficial</div>
+            <div class="yt-desc">ఉచిత న్యాయ విద్యా వీడియోలు, సరళీకృత న్యాయ భావనలు మరియు పౌర హక్కులు సులభ భాషలో వివరించబడ్డాయి. క్రమం తప్పకుండా అప్‌డేట్‌ల కోసం సబ్‌స్క్రైబ్ చేయండి!</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">⚖ ప్రాథమిక చట్ట పాఠ్యపుస్తకం</div>
+    <p class="footer-copy">© 2024 వేలు · srveli61@gmail.com · +91 94443 18208</p>
+  </footer>
+</div>
+
+<script>
+  function setLang(lang) {
+    // hide all
+    document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    // show selected
+    document.getElementById('content-' + lang).classList.add('active');
+    event.target.classList.add('active');
+    // update html lang attr
+    document.documentElement.lang = lang;
+  }
+</script>
+</body>
+</html>

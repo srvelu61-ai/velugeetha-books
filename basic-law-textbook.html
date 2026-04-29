@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Law — An Educational Textbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --parchment: #f5f0e8;
+    --cream: #faf7f2;
+    --gold: #b8923a;
+    --gold-light: #d4ab5a;
+    --navy: #0e1e3b;
+    --navy-mid: #16305c;
+    --rust: #8b3a2a;
+    --muted: #6b6358;
+    --border: #d8d0c2;
+    --sidebar-w: 280px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--cream);
+    color: var(--ink);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--navy);
+    color: #ddd;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sidebar-brand .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-brand h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .toc-title {
+    padding: 20px 24px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .toc-list { list-style: none; padding: 0 0 24px; }
+
+  .toc-list li a {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 24px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 14.5px;
+    line-height: 1.4;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+
+  .toc-list li a:hover,
+  .toc-list li a.active {
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+    border-left-color: var(--gold);
+  }
+
+  .toc-list li a .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    min-width: 22px;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+
+  .progress-bar-wrap {
+    margin: 16px 24px;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    max-width: 900px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    background: var(--navy);
+    padding: 100px 72px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(184,146,58,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #hero::after {
+    content: 'BASIC LAW';
+    position: absolute;
+    bottom: -20px; right: 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 160px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    letter-spacing: -4px;
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  #hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 6vw, 68px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  #hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.55);
+    max-width: 540px;
+    line-height: 1.7;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-meta div { text-align: center; }
+  .hero-meta .n {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold-light);
+  }
+  .hero-meta .l {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CHAPTERS ── */
+  .chapter {
+    padding: 72px 72px 56px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .chapter.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .chapter-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .chapter h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 32px;
+  }
+
+  .chapter h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy-mid);
+    margin: 36px 0 14px;
+  }
+
+  .chapter p {
+    font-size: 18px;
+    line-height: 1.85;
+    color: #2a2a2a;
+    margin-bottom: 18px;
+    max-width: 660px;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    background: var(--parchment);
+    border-left: 4px solid var(--gold);
+    padding: 20px 24px;
+    margin: 28px 0;
+    border-radius: 0 6px 6px 0;
+    max-width: 660px;
+  }
+
+  .callout.navy {
+    background: var(--navy);
+    border-left-color: var(--gold-light);
+    color: rgba(255,255,255,0.88);
+  }
+
+  .callout.navy p { color: rgba(255,255,255,0.88); }
+
+  .callout .callout-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .callout p { font-size: 16.5px; margin: 0; }
+
+  /* ── PRINCIPLES GRID ── */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin: 28px 0;
+    max-width: 720px;
+  }
+
+  .principle-card {
+    background: var(--parchment);
+    border: 1px solid var(--border);
+    padding: 22px 20px;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+
+  .principle-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .principle-card .icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .principle-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .principle-card p {
+    font-size: 14.5px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    max-width: 660px;
+    margin: 28px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 28px;
+    padding-left: 8px;
+  }
+
+  .timeline-dot {
+    flex-shrink: 0;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--cream);
+    outline: 2px solid var(--gold);
+    margin-top: 6px;
+  }
+
+  .timeline-content .year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-content strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .timeline-content p {
+    font-size: 15px;
+    color: var(--muted);
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    max-width: 660px;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 15.5px;
+  }
+
+  .compare-table th {
+    background: var(--navy);
+    color: #fff;
+    padding: 12px 18px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .compare-table td {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    color: #2a2a2a;
+    vertical-align: top;
+  }
+
+  .compare-table tr:nth-child(even) td {
+    background: var(--parchment);
+  }
+
+  /* ── QUIZ ── */
+  .quiz-section {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 36px 40px;
+    max-width: 660px;
+    margin: 36px 0;
+  }
+
+  .quiz-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .quiz-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 28px;
+  }
+
+  .quiz-question {
+    display: none;
+  }
+
+  .quiz-question.active {
+    display: block;
+    animation: fadeUp 0.4s ease;
+  }
+
+  .quiz-q-text {
+    font-size: 18px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+
+  .quiz-opt {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 12px 18px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+
+  .quiz-opt:hover { background: rgba(255,255,255,0.1); border-color: var(--gold); color: #fff; }
+  .quiz-opt.correct { background: rgba(80,180,80,0.2); border-color: #6dc96d; color: #b2e8b2; }
+  .quiz-opt.wrong   { background: rgba(200,60,60,0.2); border-color: #e06060; color: #f0b0b0; }
+
+  .quiz-feedback {
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    min-height: 24px;
+  }
+
+  .quiz-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 22px;
+  }
+
+  .quiz-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .btn {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 10px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: var(--gold-light); }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* ── GLOSSARY ── */
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 720px;
+    margin: 24px 0;
+  }
+
+  .glossary-item {
+    padding: 16px 20px;
+    background: var(--parchment);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .glossary-item dt {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .glossary-item dd {
+    font-size: 14.5px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── FOOTER ── */
+  #footer {
+    background: var(--navy);
+    padding: 48px 72px;
+    text-align: center;
+  }
+
+  #footer p {
+    color: rgba(255,255,255,0.3);
+    font-size: 14px;
+    max-width: none;
+    margin: 0;
+  }
+
+  /* ── MOBILE TOGGLE ── */
+  #menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--navy);
+    border: none;
+    color: var(--gold);
+    font-size: 22px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    #menu-toggle { display: block; }
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    .chapter { padding: 56px 28px 40px; }
+    #hero { padding: 80px 28px 60px; }
+    #hero::after { display: none; }
+  }
+
+  /* ── DIVIDER ── */
+  .ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 20px;
+    margin: 36px 0;
+    opacity: 0.5;
+    letter-spacing: 12px;
+    max-width: 660px;
+  }
+
+  .pill {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <div class="label">Textbook</div>
+    <h2>Basic Law<br>An Introduction</h2>
+  </div>
+  <div class="toc-title">Contents</div>
+  <ul class="toc-list" id="toc">
+    <li><a href="#ch0" class="toc-link"><span class="num">00</span> Introduction</a></li>
+    <li><a href="#ch1" class="toc-link"><span class="num">01</span> What is Basic Law?</a></li>
+    <li><a href="#ch2" class="toc-link"><span class="num">02</span> Historical Origins</a></li>
+    <li><a href="#ch3" class="toc-link"><span class="num">03</span> Core Principles</a></li>
+    <li><a href="#ch4" class="toc-link"><span class="num">04</span> Structure &amp; Branches</a></li>
+    <li><a href="#ch5" class="toc-link"><span class="num">05</span> Fundamental Rights</a></li>
+    <li><a href="#ch6" class="toc-link"><span class="num">06</span> Amendments</a></li>
+    <li><a href="#ch7" class="toc-link"><span class="num">07</span> Global Comparisons</a></li>
+    <li><a href="#ch8" class="toc-link"><span class="num">08</span> Self-Assessment Quiz</a></li>
+    <li><a href="#ch9" class="toc-link"><span class="num">09</span> Glossary</a></li>
+  </ul>
+  <div style="padding: 0 24px 16px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);margin-bottom:6px;text-transform:uppercase">Reading Progress</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-label">Educational Textbook · Constitutional Studies</div>
+    <h1>Basic <em>Law</em></h1>
+    <p class="hero-sub">A comprehensive guide to the foundations of constitutional governance — exploring its history, principles, rights, and global significance.</p>
+    <div class="hero-meta">
+      <div><div class="n">9</div><div class="l">Chapters</div></div>
+      <div><div class="n">30+</div><div class="l">Key Concepts</div></div>
+      <div><div class="n">10</div><div class="l">Quiz Questions</div></div>
+    </div>
+  </section>
+
+  <!-- CH0: INTRO -->
+  <section class="chapter" id="ch0">
+    <div class="chapter-tag">Introduction</div>
+    <h2>About This Textbook</h2>
+    <p>This textbook provides a structured introduction to <strong>Basic Law</strong> — the body of supreme constitutional norms that form the bedrock of a state's legal order. Whether you are a student of law, political science, or public administration, this guide will equip you with a thorough understanding of what Basic Law is, where it came from, and why it matters.</p>
+    <p>Each chapter builds upon the last, progressing from definition and history to rights, amendments, and global comparisons. A self-assessment quiz at the end allows you to test your understanding before proceeding to the glossary of key terms.</p>
+    <div class="callout">
+      <div class="callout-title">How to Use This Book</div>
+      <p>Use the sidebar to navigate between chapters. Your reading progress is tracked automatically. The quiz in Chapter 8 adapts to your responses, giving feedback after each answer.</p>
+    </div>
+  </section>
+
+  <!-- CH1 -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-tag">Chapter 01</div>
+    <h2>What Is Basic Law?</h2>
+    <p><strong>Basic Law</strong> (sometimes called a <em>Grundgesetz</em>, <em>Constitution</em>, or <em>Organic Law</em>) is the supreme legal norm of a state. It is the highest law in the legal hierarchy — all other statutes, regulations, and governmental acts must conform to it, or they may be declared invalid.</p>
+    <p>Unlike ordinary legislation that a simple parliamentary majority can pass and repeal, Basic Law is typically entrenched: it requires a special supermajority, a referendum, or both to amend. This entrenchment reflects the idea that certain foundational rules should be stable across changes of government.</p>
+
+    <h3>Key Characteristics</h3>
+    <div class="principles">
+      <div class="principle-card">
+        <div class="icon">⚖️</div>
+        <h4>Supremacy</h4>
+        <p>It overrides all other legal norms. No ordinary law may contradict it.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🏛️</div>
+        <h4>Rigidity</h4>
+        <p>Amendments require a higher threshold than ordinary legislation.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🛡️</div>
+        <h4>Rights Protection</h4>
+        <p>It typically guarantees fundamental human rights enforceable by courts.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">📜</div>
+        <h4>Legitimacy</h4>
+        <p>Its authority derives from the sovereign will of the people.</p>
+      </div>
+    </div>
+
+    <div class="callout navy">
+      <div class="callout-title">Definition</div>
+      <p>Basic Law is the supreme constitutional framework that establishes the structure of government, distributes power among its branches, and protects the fundamental rights of citizens.</p>
+    </div>
+  </section>
+
+  <!-- CH2 -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-tag">Chapter 02</div>
+    <h2>Historical Origins</h2>
+    <p>The idea of a supreme law constraining government power is ancient, but modern Basic Law as we understand it emerged largely from Enlightenment thought and the aftermath of democratic revolutions. Key historical milestones include:</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="year">1215</div>
+          <strong>Magna Carta</strong>
+          <p>England's Magna Carta is one of the earliest documents limiting royal power and asserting that even monarchs must obey the law.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="year">1776–1789</div>
+          <strong>American Founding</strong>
+          <p>The US Declaration of Independence and Constitution established the model of a written supreme law with enumerated rights and separation of powers.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="year">1789</div>
+          <strong>French Revolution</strong>
+          <p>The Declaration of the Rights of Man and the Citizen expressed universal principles of liberty and equality that influenced constitutions worldwide.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="year">1949</div>
+          <strong>German Basic Law (Grundgesetz)</strong>
+          <p>Drafted in the wake of Nazi totalitarianism, Germany's Grundgesetz is considered one of the most sophisticated Basic Laws in history, with an unamendable core of human dignity.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="year">1997</div>
+          <strong>Hong Kong Basic Law</strong>
+          <p>The Hong Kong Basic Law came into force upon the handover from Britain to China, guaranteeing a "one country, two systems" framework.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="year">21st Century</div>
+          <strong>Ongoing Development</strong>
+          <p>New constitutions continue to be drafted worldwide, incorporating international human rights norms, environmental protections, and democratic governance principles.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH3 -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-tag">Chapter 03</div>
+    <h2>Core Principles</h2>
+    <p>Most Basic Laws share a set of foundational principles that distinguish them from ordinary legislation. Understanding these principles is essential for analyzing any constitutional system.</p>
+
+    <h3>1. Rule of Law</h3>
+    <p>The <em>rule of law</em> holds that no individual — not even heads of state — is above the law. Government actions must have a legal basis, and citizens must be able to challenge unlawful acts before independent courts.</p>
+
+    <h3>2. Separation of Powers</h3>
+    <p>Power is divided among the <strong>legislature</strong> (makes laws), the <strong>executive</strong> (implements laws), and the <strong>judiciary</strong> (interprets laws). This prevents any single branch from exercising unchecked authority — a system sometimes called <em>checks and balances</em>.</p>
+
+    <div class="callout">
+      <div class="callout-title">Montesquieu's Insight</div>
+      <p>The French philosopher Montesquieu first articulated the modern doctrine of separation of powers in his 1748 work <em>The Spirit of the Laws</em>, arguing that tyranny arises when legislative and executive power are combined in one person or body.</p>
+    </div>
+
+    <h3>3. Popular Sovereignty</h3>
+    <p>Basic Law derives its legitimacy from the people. Whether through constituent assemblies, referenda, or elected representatives, the founding moment of constitutional law is rooted in the consent of the governed.</p>
+
+    <h3>4. Constitutional Review</h3>
+    <p>Courts — often a dedicated constitutional or supreme court — have the power to invalidate laws that violate the Basic Law. This is called <strong>judicial review</strong> and is the primary enforcement mechanism of constitutional norms.</p>
+
+    <h3>5. Human Dignity</h3>
+    <p>Many modern Basic Laws — most explicitly the German Grundgesetz — enshrine human dignity as an inviolable core value. This principle limits what even democratic majorities may do to individuals.</p>
+  </section>
+
+  <!-- CH4 -->
+  <section class="chapter" id="ch4">
+    <div class="chapter-tag">Chapter 04</div>
+    <h2>Structure &amp; Branches of Government</h2>
+    <p>Basic Law does not just protect rights — it also organizes the state. The constitutional design of government institutions shapes how laws are made, enforced, and reviewed.</p>
+
+    <h3>The Legislature</h3>
+    <p>Parliaments or congresses are vested with the primary power to make laws. Basic Law typically specifies how legislators are elected, the length of terms, quorum requirements, and the legislative process. In federal systems, there may be two chambers representing the people and the constituent states separately.</p>
+
+    <h3>The Executive</h3>
+    <p>Governments or presidents hold executive power. Basic Law defines whether a system is <em>parliamentary</em> (where the executive is accountable to the legislature), <em>presidential</em> (where both are separately elected), or a <em>hybrid</em>. It also sets out emergency powers — carefully constrained to prevent their abuse.</p>
+
+    <h3>The Judiciary</h3>
+    <p>Courts resolve disputes and interpret the law. At the apex, a supreme or constitutional court has the final word on the meaning of the Basic Law. The independence of judges — secured by fixed tenure and protected salaries — is a cornerstone of constitutional democracy.</p>
+
+    <div class="callout navy">
+      <div class="callout-title">Federal vs. Unitary Systems</div>
+      <p>Some Basic Laws establish federal systems where power is shared between a central government and regional governments (e.g., Germany, the United States, India). Others create unitary states where all authority flows from the center (e.g., France, Japan).</p>
+    </div>
+  </section>
+
+  <!-- CH5 -->
+  <section class="chapter" id="ch5">
+    <div class="chapter-tag">Chapter 05</div>
+    <h2>Fundamental Rights</h2>
+    <p>One of the most important functions of Basic Law is the protection of fundamental rights. These rights — typically set out in a <em>Bill of Rights</em> or <em>Charter</em> — place limits on state power and guarantee individual freedoms.</p>
+
+    <h3>Categories of Rights</h3>
+    <div class="principles">
+      <div class="principle-card">
+        <div class="icon">🗣️</div>
+        <h4>Civil &amp; Political</h4>
+        <p>Freedom of speech, assembly, religion, fair trial, and equal protection. These are sometimes called "first generation" rights.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🏥</div>
+        <h4>Social &amp; Economic</h4>
+        <p>Rights to education, health, housing, and social security. Known as "second generation" rights, they impose positive obligations on the state.</p>
+      </div>
+      <div class="principle-card">
+        <div class="icon">🌍</div>
+        <h4>Collective &amp; Environmental</h4>
+        <p>Rights to a clean environment, cultural heritage, and self-determination. These "third generation" rights are increasingly recognized in newer constitutions.</p>
+      </div>
+    </div>
+
+    <h3>Limitations on Rights</h3>
+    <p>Rights under Basic Law are rarely absolute. Most constitutions include a general <strong>limitation clause</strong> permitting rights to be restricted if the restriction is: (1) prescribed by law; (2) in pursuit of a legitimate aim; and (3) proportionate to that aim. Courts use this proportionality test to strike the balance between individual freedom and the public interest.</p>
+
+    <div class="callout">
+      <div class="callout-title">The Proportionality Principle</div>
+      <p>When a government restricts a right, courts ask three questions: Is the restriction rationally connected to a legitimate goal? Does it minimally impair the right? Is the benefit to society proportionate to the harm to the individual? If any answer is "no," the restriction is unconstitutional.</p>
+    </div>
+  </section>
+
+  <!-- CH6 -->
+  <section class="chapter" id="ch6">
+    <div class="chapter-tag">Chapter 06</div>
+    <h2>Amending Basic Law</h2>
+    <p>Basic Law must be stable enough to inspire trust, yet flexible enough to adapt to changing societies. The amendment process is therefore carefully designed to be more demanding than ordinary legislation.</p>
+
+    <h3>Common Amendment Mechanisms</h3>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Mechanism</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Supermajority</td>
+          <td>A two-thirds or three-quarters majority in parliament is required</td>
+          <td>Germany (Art. 79 GG)</td>
+        </tr>
+        <tr>
+          <td>Referendum</td>
+          <td>Citizens vote directly to approve an amendment</td>
+          <td>Ireland, Australia</td>
+        </tr>
+        <tr>
+          <td>State Ratification</td>
+          <td>A majority of constituent states must also approve</td>
+          <td>USA (3/4 of states)</td>
+        </tr>
+        <tr>
+          <td>Entrenched Core</td>
+          <td>Certain provisions are permanently unamendable</td>
+          <td>Germany (human dignity, federalism)</td>
+        </tr>
+        <tr>
+          <td>Staged Process</td>
+          <td>Two successive parliaments must approve the change</td>
+          <td>Belgium, Netherlands</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Unconstitutional Constitutional Amendments</h3>
+    <p>Some constitutional courts have held that amendments which violate the <em>basic structure</em> of the constitution are themselves unconstitutional — even if passed by the required supermajority. India's Supreme Court pioneered this doctrine in <em>Kesavananda Bharati v. State of Kerala</em> (1973), and it has since been adopted in several other jurisdictions.</p>
+  </section>
+
+  <!-- CH7 -->
+  <section class="chapter" id="ch7">
+    <div class="chapter-tag">Chapter 07</div>
+    <h2>Global Comparisons</h2>
+    <p>Basic Law takes different forms across the world, shaped by history, culture, and political context. A comparative view reveals both universal principles and remarkable diversity.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Document</th>
+          <th>Adopted</th>
+          <th>Notable Feature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🇩🇪 Germany</td>
+          <td>Grundgesetz</td>
+          <td>1949</td>
+          <td>Eternity clause; Federal Constitutional Court; strong rights catalog</td>
+        </tr>
+        <tr>
+          <td>🇺🇸 USA</td>
+          <td>Constitution</td>
+          <td>1789</td>
+          <td>World's oldest written constitution; Bill of Rights (1791)</td>
+        </tr>
+        <tr>
+          <td>🇮🇳 India</td>
+          <td>Constitution</td>
+          <td>1950</td>
+          <td>Longest constitution; basic structure doctrine; directive principles</td>
+        </tr>
+        <tr>
+          <td>🇯🇵 Japan</td>
+          <td>Constitution</td>
+          <td>1947</td>
+          <td>Article 9 renouncing war; never formally amended</td>
+        </tr>
+        <tr>
+          <td>🇿🇦 South Africa</td>
+          <td>Constitution</td>
+          <td>1996</td>
+          <td>Post-apartheid bill of rights; includes socio-economic rights</td>
+        </tr>
+        <tr>
+          <td>🇭🇰 Hong Kong</td>
+          <td>Basic Law</td>
+          <td>1997</td>
+          <td>"One country, two systems"; 50-year framework</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="ornament">✦ ✦ ✦</div>
+
+    <p>Despite their differences, virtually all modern Basic Laws converge on certain minimum standards: free and fair elections, an independent judiciary, guaranteed personal freedoms, and legal equality. These are increasingly recognized as universal norms of constitutional democracy.</p>
+  </section>
+
+  <!-- CH8: QUIZ -->
+  <section class="chapter" id="ch8">
+    <div class="chapter-tag">Chapter 08</div>
+    <h2>Self-Assessment Quiz</h2>
+    <p>Test your understanding of the material covered in this textbook. Choose the best answer for each question. Feedback will be provided after each response.</p>
+
+    <div class="quiz-section">
+      <h3>Knowledge Check</h3>
+      <div class="quiz-subtitle">10 Questions · Multiple Choice</div>
+
+      <!-- Q1 -->
+      <div class="quiz-question active" id="q1">
+        <div class="quiz-q-text">1. What makes Basic Law different from ordinary legislation?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'Basic Law is typically more complex, but complexity alone is not the defining feature.')">It is longer and more complex</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! Basic Law is entrenched — requiring a higher threshold (supermajority, referendum, etc.) to amend, and it overrides all other laws.')">It is entrenched and supreme, requiring a higher threshold to amend</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Basic Law applies to all people, not just government officials.')">It only applies to government officials</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Basic Law is enacted by special constitutional processes, not simply by a head of state.')">It is enacted solely by the head of state</button>
+        </div>
+        <div class="quiz-feedback" id="f1"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 1 of 10</span>
+          <button class="btn" id="next1" disabled onclick="nextQ(1)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="quiz-question" id="q2">
+        <div class="quiz-q-text">2. The doctrine that no person is above the law is known as:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'Parliamentary sovereignty refers to the supremacy of parliament within its sphere, not the constraint on individuals.')">Parliamentary Sovereignty</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Judicial review is the power of courts to invalidate unconstitutional laws, not the general principle about legal equality.')">Judicial Review</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! The Rule of Law means every person and institution is equally subject to the law — no one is above it.')">Rule of Law</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Popular sovereignty refers to the people as the source of governmental authority.')">Popular Sovereignty</button>
+        </div>
+        <div class="quiz-feedback" id="f2"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 2 of 10</span>
+          <button class="btn" id="next2" disabled onclick="nextQ(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="quiz-question" id="q3">
+        <div class="quiz-q-text">3. Which year was the German Grundgesetz (Basic Law) adopted?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, '1933 was the year the Nazi party came to power — the opposite of a democratic basic law.')">1933</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! The German Grundgesetz was adopted on 23 May 1949, after World War II, to prevent a return to authoritarian rule.')">1949</button>
+          <button class="quiz-opt" onclick="answer(this, false, '1918 saw the end of WWI and the Weimar Republic was founded, but the Grundgesetz came later.')">1918</button>
+          <button class="quiz-opt" onclick="answer(this, false, '1989 was the year the Berlin Wall fell. Reunification occurred in 1990 and extended the Grundgesetz to East Germany.')">1989</button>
+        </div>
+        <div class="quiz-feedback" id="f3"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 3 of 10</span>
+          <button class="btn" id="next3" disabled onclick="nextQ(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="quiz-question" id="q4">
+        <div class="quiz-q-text">4. What is "judicial review"?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'That describes an audit — judicial review has a specific constitutional meaning.')">A financial audit of court decisions</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'That describes appeal — judicial review is distinct from the ordinary appeals process.')">The process of appealing a criminal verdict</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! Judicial review is the power of courts to examine laws and government acts and invalidate those that are incompatible with the Basic Law.')">The power of courts to strike down laws that violate the Basic Law</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Judicial review is not primarily about reviewing the conduct of judges themselves.')">A review of a judge\'s personal conduct</button>
+        </div>
+        <div class="quiz-feedback" id="f4"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 4 of 10</span>
+          <button class="btn" id="next4" disabled onclick="nextQ(4)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="quiz-question" id="q5">
+        <div class="quiz-q-text">5. The separation of powers divides government into three branches. Which of the following is NOT one of them?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'The Legislature (parliament/congress) is indeed one of the three classic branches.')">Legislature</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'The Executive (president/government) is one of the three classic branches.')">Executive</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'The Judiciary (courts) is one of the three classic branches.')">Judiciary</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! The Bureaucracy, while important in government, is not one of the three constitutional branches of government in the separation of powers doctrine.')">Bureaucracy</button>
+        </div>
+        <div class="quiz-feedback" id="f5"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 5 of 10</span>
+          <button class="btn" id="next5" disabled onclick="nextQ(5)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="quiz-question" id="q6">
+        <div class="quiz-q-text">6. Which country pioneered the "basic structure doctrine," holding that some parts of the constitution cannot be amended?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'Germany has an eternity clause, but the basic structure doctrine as developed by courts originated elsewhere.')">Germany</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'The USA has a rigid amendment process but no judicially developed basic structure doctrine.')">United States</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! India\'s Supreme Court developed the basic structure doctrine in Kesavananda Bharati v. State of Kerala (1973).')">India</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'France has a strong constitutional tradition but is not the origin of the basic structure doctrine.')">France</button>
+        </div>
+        <div class="quiz-feedback" id="f6"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 6 of 10</span>
+          <button class="btn" id="next6" disabled onclick="nextQ(6)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="quiz-question" id="q7">
+        <div class="quiz-q-text">7. Rights to education, healthcare, and housing are known as:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'Civil and political rights (1st generation) include things like free speech and fair trial, not social entitlements.')">Civil and Political Rights</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! Social and economic rights are "second generation" rights that impose positive obligations on the state to provide services and resources.')">Social and Economic Rights</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Collective rights are "third generation" rights focused on groups or the environment, not individual social entitlements.')">Collective Rights</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Procedural rights relate to fair processes (like a fair trial), not social welfare entitlements.')">Procedural Rights</button>
+        </div>
+        <div class="quiz-feedback" id="f7"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 7 of 10</span>
+          <button class="btn" id="next7" disabled onclick="nextQ(7)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="quiz-question" id="q8">
+        <div class="quiz-q-text">8. The proportionality principle asks courts to consider all of the following EXCEPT:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'Rational connection — whether the restriction is linked to a legitimate goal — IS part of proportionality analysis.')">Whether the restriction is rationally connected to a legitimate goal</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Minimal impairment — whether the restriction impairs the right as little as possible — IS part of proportionality.')">Whether the restriction minimally impairs the right</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'Balancing costs and benefits IS part of proportionality analysis.')">Whether the benefit to society outweighs the harm to the individual</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! The personal beliefs of the judge are NOT a formal part of proportionality analysis, which is an objective legal test.')">Whether the judge personally agrees with the law</button>
+        </div>
+        <div class="quiz-feedback" id="f8"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 8 of 10</span>
+          <button class="btn" id="next8" disabled onclick="nextQ(8)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="quiz-question" id="q9">
+        <div class="quiz-q-text">9. Which document is often considered the earliest precursor to modern constitutional limitation on power?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! Magna Carta (1215) is widely recognized as one of the earliest documents limiting royal power and asserting that even monarchs must obey the law.')">Magna Carta (1215)</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'The Declaration of Independence (1776) is important but postdates Magna Carta by more than 500 years.')">US Declaration of Independence (1776)</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'The German Grundgesetz (1949) is a modern constitution, not the earliest precursor.')">German Grundgesetz (1949)</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'The Universal Declaration of Human Rights (1948) is a key international instrument, but Magna Carta is an earlier precursor to constitutional limits on power.')">UN Declaration of Human Rights (1948)</button>
+        </div>
+        <div class="quiz-feedback" id="f9"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 9 of 10</span>
+          <button class="btn" id="next9" disabled onclick="nextQ(9)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="quiz-question" id="q10">
+        <div class="quiz-q-text">10. In a federal constitutional system, power is:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="answer(this, false, 'That describes a unitary state, not a federal system.')">Concentrated solely in the central government</button>
+          <button class="quiz-opt" onclick="answer(this, true, 'Correct! In a federal system, constitutional authority is distributed between a central (federal) government and regional (state/provincial) governments, each supreme in their respective spheres.')">Shared between a central government and regional governments</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'That describes a confederation, which is a looser arrangement than a true federal system.')">Held entirely by regional governments, with the center acting as a coordinator</button>
+          <button class="quiz-opt" onclick="answer(this, false, 'That would be a technocracy — unrelated to federalism.')">Vested in expert agencies independent of elected officials</button>
+        </div>
+        <div class="quiz-feedback" id="f10"></div>
+        <div class="quiz-nav">
+          <span class="quiz-counter">Question 10 of 10</span>
+          <button class="btn" id="next10" disabled onclick="showResults()">See Results →</button>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="quiz-question" id="results">
+        <div class="quiz-q-text" id="score-text" style="font-size:22px;"></div>
+        <div class="quiz-feedback" id="score-feedback" style="font-size:17px;margin-top:10px;"></div>
+        <div class="quiz-nav" style="margin-top:24px;">
+          <span></span>
+          <button class="btn" onclick="restartQuiz()">Retake Quiz ↺</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CH9: GLOSSARY -->
+  <section class="chapter" id="ch9">
+    <div class="chapter-tag">Chapter 09</div>
+    <h2>Glossary of Key Terms</h2>
+    <p>The following terms are central to the study of Basic Law and constitutional systems. Mastery of this vocabulary is essential for legal analysis.</p>
+
+    <div class="glossary-grid">
+      <dl class="glossary-item">
+        <dt>Basic Law</dt>
+        <dd>The supreme constitutional document establishing the legal foundation of a state, overriding all other legislation.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Constitutionalism</dt>
+        <dd>The principle that government authority must be exercised in accordance with, and limited by, a constitution.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Judicial Review</dt>
+        <dd>The power of courts to examine laws and government actions for compatibility with the Basic Law.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Rule of Law</dt>
+        <dd>The doctrine that every person and institution is equally subject to the law; no one is above it.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Separation of Powers</dt>
+        <dd>The division of governmental authority among the legislature, executive, and judiciary to prevent concentration of power.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Checks and Balances</dt>
+        <dd>Mechanisms by which each branch of government can limit the powers of the other branches.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Entrenchment</dt>
+        <dd>Protection of constitutional provisions from easy amendment by requiring higher approval thresholds.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Eternity Clause</dt>
+        <dd>A constitutional provision that permanently removes certain articles from the amendment process.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Federalism</dt>
+        <dd>A system in which constitutional power is distributed between a central government and constituent regional governments.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Popular Sovereignty</dt>
+        <dd>The principle that the authority of the state derives from the consent and will of the people.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Proportionality</dt>
+        <dd>The constitutional test requiring that restrictions on rights are rationally connected to a legitimate aim and no more extensive than necessary.</dd>
+      </dl>
+      <dl class="glossary-item">
+        <dt>Basic Structure Doctrine</dt>
+        <dd>A judicial doctrine holding that certain fundamental features of a constitution cannot be altered even by formal amendment.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <p>Basic Law · An Educational Textbook &nbsp;|&nbsp; For academic and instructional use &nbsp;|&nbsp; © 2025</p>
+  </footer>
+
+</div><!-- /main -->
+
+<script>
+  // ── PROGRESS BAR ──
+  window.addEventListener('scroll', () => {
+    const el = document.documentElement;
+    const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  // ── INTERSECTION OBSERVER ──
+  const chapters = document.querySelectorAll('.chapter');
+  const links = document.querySelectorAll('.toc-link');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // update active link
+        const id = e.target.id;
+        links.forEach(l => {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  chapters.forEach(c => obs.observe(c));
+
+  // ── MOBILE SIDEBAR ──
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // ── QUIZ ──
+  let score = 0;
+  let currentQ = 1;
+
+  function answer(btn, correct, feedback) {
+    const qNum = currentQ;
+    const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-opt');
+    opts.forEach(o => o.disabled = true);
+
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) {
+      // highlight correct
+      opts.forEach(o => {
+        if (o.getAttribute('onclick').includes('true')) o.classList.add('correct');
+      });
+    }
+
+    document.getElementById('f' + qNum).textContent = feedback;
+    document.getElementById('next' + qNum).disabled = false;
+    if (correct) score++;
+  }
+
+  function nextQ(n) {
+    document.getElementById('q' + n).classList.remove('active');
+    currentQ = n + 1;
+    if (currentQ <= 10) {
+      document.getElementById('q' + currentQ).classList.add('active');
+    }
+  }
+
+  function showResults() {
+    document.getElementById('q10').classList.remove('active');
+    document.getElementById('results').classList.add('active');
+    const pct = (score / 10) * 100;
+    document.getElementById('score-text').textContent = `You scored ${score} out of 10 (${pct}%)`;
+    let msg = '';
+    if (score >= 9) msg = '🏆 Outstanding! You have an excellent command of Basic Law concepts.';
+    else if (score >= 7) msg = '👍 Well done! Review a few chapters to strengthen any gaps.';
+    else if (score >= 5) msg = '📖 Good effort. We recommend revisiting Chapters 1–6 for a deeper understanding.';
+    else msg = '💡 Keep studying! Start from Chapter 1 and work through each section carefully.';
+    document.getElementById('score-feedback').textContent = msg;
+  }
+
+  function restartQuiz() {
+    score = 0; currentQ = 1;
+    document.getElementById('results').classList.remove('active');
+    for (let i = 1; i <= 10; i++) {
+      const q = document.getElementById('q' + i);
+      q.classList.remove('active');
+      q.querySelectorAll('.quiz-opt').forEach(o => {
+        o.disabled = false;
+        o.classList.remove('correct','wrong');
+      });
+      document.getElementById('f' + i).textContent = '';
+      document.getElementById('next' + i).disabled = true;
+    }
+    document.getElementById('q1').classList.add('active');
+  }
+</script>
+</body>
+</html>
